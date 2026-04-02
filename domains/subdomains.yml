@@ -1,0 +1,16 @@
+subdomains:
+  # add yours below
+  # subdomain.tinkerhub.org -> container:port
+
+  - subdomain: chat
+    target: mattermost
+    port: 8065
+
+  - subdomain: monitor
+    target: monitoring
+    port: 3000
+
+  # members — add yours below
+  - subdomain: nihal
+    target: member-nihal
+    port: 8080

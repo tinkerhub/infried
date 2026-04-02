@@ -1,0 +1,9 @@
+# members — add yours below
+# copy the block, change name/user/ssh_key
+- name: member-nihal
+  bridge: incusbr-members
+  cpu: 4
+  memory: 4GB
+  disk: 5GB
+  user: nihal
+  ssh_key: "ssh-ed25519 AAAA..."
