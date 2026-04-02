@@ -19,8 +19,11 @@ jobs:
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
           rsync -az --delete \
-            -e "ssh -o StrictHostKeyChecking=no -p 22" \
-            ./ tinkerspace@187.127.143.52:/opt/infried/
+            -e "ssh -o StrictHostKeyChecking=no -p 2222" \
+            ./ nihal@187.127.143.52:/opt/infried/
+
+            ssh -o StrictHostKeyChecking=no -p 2222 nihal@187.127.143.52 \
+              "cd /opt/infried && sudo bash scripts/apply-containers.sh"
 
       - name: apply containers
         run: |
