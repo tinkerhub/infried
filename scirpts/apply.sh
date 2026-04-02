@@ -9,11 +9,11 @@ echo ""
 
 echo ""
 echo "[2/3] containers"
-bash "$SCRIPTS/apply-containers.sh"
+bash "$SCRIPTS/containers.sh"
 
 echo ""
 echo "[3/3] subdomains"
-bash "$SCRIPTS/apply-subdomains.sh"
+bash "$SCRIPTS/subdomains.sh"
 
 echo ""
 echo "done."
