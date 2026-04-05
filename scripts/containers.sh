@@ -47,22 +47,52 @@ for c in containers:
     ], check=True)
 
 
-    if 'user' in c and 'ssh_key' in c:
-        user = c['user']
-        key  = c['ssh_key']
-
-        setup_cmd = f'''
-        id -u {user} >/dev/null 2>&1 || useradd -m -s /bin/bash {user};
-        mkdir -p /home/{user}/.ssh;
-        echo "{key}" > /home/{user}/.ssh/authorized_keys;
-        chmod 700 /home/{user}/.ssh;
-        chmod 600 /home/{user}/.ssh/authorized_keys;
-        chown -R {user}:{user} /home/{user}/.ssh;
-        '''
-
-        subprocess.run([
-            'incus', 'exec', name, '--', 'bash', '-c', setup_cmd
-        ], check=True)
-
     print(f"{name} ready")
+
+for c in containers:
+    name = c['name']
+
+    if 'user' not in c or 'ssh_key' not in c:
+        continue
+
+    user = c['user']
+    key  = c['ssh_key'].strip()
+
+    print(f"  configuring ssh for {name} ({user})")
+
+    subprocess.run([
+        'incus', 'exec', name, '--',
+        'bash', '-c', 'apt-get install -y -q openssh-server && systemctl enable --now ssh'
+    ], check=True)
+
+    ssh_port = c.get('ssh_port', 2223)
+
+    devices = subprocess.run(
+        ['incus', 'config', 'device', 'show', name],
+        capture_output=True, text=True
+    ).stdout
+
+    if 'ssh-proxy' not in devices:
+        subprocess.run([
+            'incus', 'config', 'device', 'add', name, 'ssh-proxy', 'proxy',
+            f'listen=tcp:0.0.0.0:{ssh_port}',
+            'connect=tcp:127.0.0.1:22'
+        ], check=True)
+        print(f"  proxy added on port {ssh_port}")
+
+    setup_cmd = f'''
+set -e
+id -u {user} >/dev/null 2>&1 || useradd -m -s /bin/bash {user}
+mkdir -p /home/{user}/.ssh
+printf '%s\\n' '{key}' > /home/{user}/.ssh/authorized_keys
+chmod 700 /home/{user}/.ssh
+chmod 600 /home/{user}/.ssh/authorized_keys
+chown -R {user}:{user} /home/{user}/.ssh
+'''
+
+    subprocess.run([
+        'incus', 'exec', name, '--', 'bash', '-c', setup_cmd
+    ], check=True)
+
+    print(f"  ssh ready for {user}@{name}")
 EOF
