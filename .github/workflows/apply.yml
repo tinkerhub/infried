@@ -30,7 +30,7 @@ jobs:
           chmod 600 ~/.ssh/vps_key
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key root@187.127.143.52 \
-            "mkdir -p /opt/infried/containers"
+            "mkdir -p /opt/infried/containers /opt/infried/scripts"
 
           rsync -az \
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key" \
