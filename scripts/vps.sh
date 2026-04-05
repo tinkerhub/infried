@@ -47,6 +47,7 @@ for c in containers:
     print(f"  port {port} forwarded")
 
 # persist rules
+subprocess.run(['apt-get', 'install', '-y', '-q', 'iptables-persistent'], check=True)
 subprocess.run(['netfilter-persistent', 'save'], check=True)
 print("rules saved")
 EOF
