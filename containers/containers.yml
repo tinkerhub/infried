@@ -7,3 +7,11 @@
   disk: 5GB
   user: nihal
   ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKxwbp0PcUT1+r8wX3wwxhXPO9RefNWvE3qxF7T29Y3t tharilla"
+
+- name: nihal2
+  bridge: incusbr-members
+  cpu: 4
+  memory: 4GB
+  disk: 5GB
+  user: nihal2
+  ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE+GRo3Is1QsbH4n6hlqiif9gV6Ncaby6E3QPsOLuAd tharaam"
