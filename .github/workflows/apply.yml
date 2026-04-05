@@ -3,36 +3,22 @@ name: apply
 on:
   push:
     branches: [main]
-  pull_request:
-    branches: [main]
 
 jobs:
   apply:
     runs-on: ubuntu-latest
-    if: github.event_name == 'push'
     steps:
       - uses: actions/checkout@v4
 
-      - name: sync repo to tinkerspace
+      - name: sync and apply
         run: |
           mkdir -p ~/.ssh
           echo "${{ secrets.SSH_KEY }}" > ~/.ssh/id_ed25519
           chmod 600 ~/.ssh/id_ed25519
+
           rsync -az --delete \
-            -e "ssh -o StrictHostKeyChecking=no -p 22" \
-            ./ tinkerspace@187.127.143.52:/opt/infried/
+            -e "ssh -o StrictHostKeyChecking=no -p 2222" \
+            ./ deploy@187.127.143.52:/opt/infried/
 
-      - name: apply containers
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 22 tinkerspace@187.127.143.52 \
-            "cd /opt/infried && sudo bash scripts/apply-containers.sh"
-
-      - name: apply subdomains
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 22 tinkerspace@187.127.143.52 \
-            "cd /opt/infried && sudo bash scripts/apply-subdomains.sh"
-
-      - name: reload nginx
-        run: |
-          ssh -o StrictHostKeyChecking=no -p 22 tinkerspace@187.127.143.52 \
-            "incus exec reverse-proxy -- nginx -t && incus exec reverse-proxy -- nginx -s reload"
+          ssh -o StrictHostKeyChecking=no -p 2222 deploy@187.127.143.52 \
+            "cd /opt/infried && sudo bash scripts/containers.sh "
