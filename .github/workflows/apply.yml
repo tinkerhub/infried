@@ -29,9 +29,16 @@ jobs:
           echo "${{ secrets.VPS_SSH_KEY }}" > ~/.ssh/vps_key
           chmod 600 ~/.ssh/vps_key
 
+          ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key root@187.127.143.52 \
+            "mkdir -p /opt/infried/containers"
+
           rsync -az \
             -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key" \
             containers/containers.yml root@187.127.143.52:/opt/infried/containers/containers.yml
+
+          rsync -az \
+            -e "ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key" \
+            scripts/vps.sh root@187.127.143.52:/opt/infried/scripts/vps.sh
 
           ssh -o StrictHostKeyChecking=no -i ~/.ssh/vps_key root@187.127.143.52 \
             "cd /opt/infried && bash scripts/vps.sh"
