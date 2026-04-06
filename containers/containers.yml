@@ -17,3 +17,13 @@
   ssh_port: 2224
   user: nihal2
   ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIJE+GRo3Is1QsbH4n6hlqiif9gV6Ncaby6E3QPsOLuAd tharaam"
+
+  - name: Devadath
+  bridge: incusbr-members
+  cpu: 4
+  memory: 4GB
+  disk: 5GB  
+  ssh_port: 2224
+  user: Devadath
+  ssh_key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIFPnwdhXo6fnWErGyGQSRM7tots8Y6tbEjqsuDjJ5Bpn devadaths3@gmail.com
+"
