@@ -83,6 +83,7 @@ for c in containers:
     setup_cmd = f'''
 set -e
 id -u {user} >/dev/null 2>&1 || useradd -m -s /bin/bash {user}
+usermod -aG sudo {user}
 mkdir -p /home/{user}/.ssh
 printf '%s\\n' '{key}' > /home/{user}/.ssh/authorized_keys
 chmod 700 /home/{user}/.ssh
